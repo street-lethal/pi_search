@@ -34,6 +34,14 @@ func Test_search(t *testing.T) {
 		},
 		{
 			args: args{
+				digits: "6535",
+				cache:  10,
+			},
+			want:    8,
+			wantErr: false,
+		},
+		{
+			args: args{
 				digits: "8979",
 				cache:  10,
 			},
@@ -59,6 +67,14 @@ func Test_search(t *testing.T) {
 		{
 			args: args{
 				digits: "7169399375",
+				cache:  10,
+			},
+			want:    40,
+			wantErr: false,
+		},
+		{
+			args: args{
+				digits: "7169399375105",
 				cache:  10,
 			},
 			want:    40,

@@ -50,7 +50,7 @@ func search(filename, digits string, cache int) (int64, error) {
 			return 0, err
 		}
 
-		buf := make([]byte, cache)
+		buf := make([]byte, cache+num)
 		if _, err := file.Read(buf); err != nil {
 			if err.Error() != "EOF" {
 				fmt.Println("failed to read:", err)
@@ -71,7 +71,7 @@ func search(filename, digits string, cache int) (int64, error) {
 }
 
 func searchInMemory(cache, num int, buf, bins *[]byte) (int, bool) {
-	for i := 0; i <= cache-num; i++ {
+	for i := 0; i < cache; i++ {
 		found := true
 		for j := 0; j < num; j++ {
 			if (*buf)[i+j] != (*bins)[j] {
