@@ -80,6 +80,14 @@ func Test_search(t *testing.T) {
 			want:    40,
 			wantErr: false,
 		},
+		{
+			args: args{
+				digits: "12345",
+				cache:  10,
+			},
+			want:    0,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
