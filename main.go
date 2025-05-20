@@ -53,7 +53,7 @@ func search(filename, digits string, cache int) (int64, error) {
 		buf := make([]byte, cache+num)
 		if _, err := file.Read(buf); err != nil {
 			if err.Error() != "EOF" {
-				fmt.Println("failed to read:", err)
+				return 0, fmt.Errorf("failed to read: %v", err)
 			}
 
 			break
