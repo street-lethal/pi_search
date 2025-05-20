@@ -85,8 +85,8 @@ func Test_search(t *testing.T) {
 				digits: "12345",
 				cache:  10,
 			},
-			want:    0,
-			wantErr: true,
+			want:    -1,
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
