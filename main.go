@@ -9,20 +9,20 @@ import (
 
 func main() {
 	digits := os.Args[1]
-	cache := 100_000
+	cacheSize := 100_000
 	if len(os.Args) > 2 {
 		cacheStr := os.Args[2]
 		if cacheStr != "" {
 			v, err := strconv.Atoi(cacheStr)
 			if err == nil {
-				cache = v
+				cacheSize = v
 			}
 		}
 	}
 
 	before := time.Now()
 
-	num, err := search("pi.txt", digits, cache)
+	num, err := search("pi.txt", digits, cacheSize)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -38,7 +38,7 @@ func main() {
 	fmt.Println(after.Sub(before))
 }
 
-func search(filename, digits string, cache int) (int64, error) {
+func search(filename, digits string, cacheSize int) (int64, error) {
 	file, err := os.Open(fmt.Sprintf("./data/%s", filename))
 	if err != nil {
 		return 0, err
@@ -46,16 +46,14 @@ func search(filename, digits string, cache int) (int64, error) {
 	defer file.Close()
 
 	bins := []byte(digits)
-	num := len(bins)
+	cache := make([]byte, cacheSize+len(bins))
 
-	var i int64
-	for {
+	for i := int64(0); ; i += int64(cacheSize) {
 		if _, err = file.Seek(i, 0); err != nil {
 			return 0, err
 		}
 
-		buf := make([]byte, cache+num)
-		if _, err := file.Read(buf); err != nil {
+		if _, err := file.Read(cache); err != nil {
 			if err.Error() != "EOF" {
 				return 0, fmt.Errorf("failed to read: %v", err)
 			}
@@ -63,22 +61,19 @@ func search(filename, digits string, cache int) (int64, error) {
 			break
 		}
 
-		got, found := searchInMemory(cache, buf, bins)
-		if found {
+		if got, found := searchInMemory(cacheSize, cache, bins); found {
 			return i + int64(got), err
 		}
-
-		i += int64(cache)
 	}
 
 	return -1, nil
 }
 
-func searchInMemory(cache int, buf, bins []byte) (int, bool) {
+func searchInMemory(cacheSize int, cache, bins []byte) (int, bool) {
 outerLoop:
-	for i := 0; i < cache; i++ {
+	for i := 0; i < cacheSize; i++ {
 		for j, bin := range bins {
-			if buf[i+j] != bin {
+			if cache[i+j] != bin {
 				continue outerLoop
 			}
 		}
