@@ -29,7 +29,11 @@ func main() {
 
 	after := time.Now()
 
-	fmt.Println(num)
+	if num > 0 {
+		fmt.Println(num)
+	} else {
+		fmt.Println("not found")
+	}
 
 	fmt.Println(after.Sub(before))
 }
@@ -67,7 +71,7 @@ func search(filename, digits string, cache int) (int64, error) {
 		i += int64(cache)
 	}
 
-	return 0, fmt.Errorf("not found")
+	return -1, nil
 }
 
 func searchInMemory(cache, num int, buf, bins []byte) (int, bool) {
