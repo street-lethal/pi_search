@@ -63,7 +63,7 @@ func search(filename, digits string, cache int) (int64, error) {
 			break
 		}
 
-		got, found := searchInMemory(cache, num, buf, bins)
+		got, found := searchInMemory(cache, buf, bins)
 		if found {
 			return i + int64(got), err
 		}
@@ -74,11 +74,11 @@ func search(filename, digits string, cache int) (int64, error) {
 	return -1, nil
 }
 
-func searchInMemory(cache, num int, buf, bins []byte) (int, bool) {
+func searchInMemory(cache int, buf, bins []byte) (int, bool) {
 outerLoop:
 	for i := 0; i < cache; i++ {
-		for j := 0; j < num; j++ {
-			if buf[i+j] != bins[j] {
+		for j, bin := range bins {
+			if buf[i+j] != bin {
 				continue outerLoop
 			}
 		}
