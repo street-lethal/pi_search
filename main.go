@@ -59,7 +59,7 @@ func search(filename, digits string, cache int) (int64, error) {
 			break
 		}
 
-		got, found := searchInMemory(cache, num, &buf, &bins)
+		got, found := searchInMemory(cache, num, buf, bins)
 		if found {
 			return i + int64(got), err
 		}
@@ -70,11 +70,11 @@ func search(filename, digits string, cache int) (int64, error) {
 	return 0, fmt.Errorf("not found")
 }
 
-func searchInMemory(cache, num int, buf, bins *[]byte) (int, bool) {
+func searchInMemory(cache, num int, buf, bins []byte) (int, bool) {
 	for i := 0; i < cache; i++ {
 		found := true
 		for j := 0; j < num; j++ {
-			if (*buf)[i+j] != (*bins)[j] {
+			if buf[i+j] != bins[j] {
 				found = false
 				break
 			}
